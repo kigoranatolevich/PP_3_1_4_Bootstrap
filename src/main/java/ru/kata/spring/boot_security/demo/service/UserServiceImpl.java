@@ -25,6 +25,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public void save(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
 
@@ -41,9 +42,8 @@ public class UserServiceImpl implements UserService {
         String password = findUserByEmail(existingUser.getEmail()).getPassword();
         boolean b = existingUser.getPassword().equals(password);
         if(b) {
-            save(existingUser);
+            userRepository.save(existingUser);
         } else {
-            existingUser.setPassword(passwordEncoder.encode(existingUser.getPassword()));
             save(existingUser);
         }
     }
